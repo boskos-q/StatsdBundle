@@ -18,13 +18,8 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        if (method_exists(new TreeBuilder(), 'getRootNode')) {
-            $treeBuilder = new TreeBuilder('m6_statsd');
-            $rootNode = $treeBuilder->getRootNode();
-        } else {
-            $treeBuilder = new TreeBuilder();
-            $rootNode = $treeBuilder->root('m6_statsd');
-        }
+        $treeBuilder = new TreeBuilder('m6_statsd');
+        $rootNode    = $treeBuilder->getRootNode();
 
         $this->addServersSection($rootNode);
         $this->addClientsSection($rootNode);
