@@ -51,11 +51,11 @@ class Listener
     /**
      * method called on the kernel.terminate event
      *
-     * @param PostResponseEvent $event event
+     * @param TerminateEvent $event event
      *
      * @return void
      */
-    public function onKernelTerminate(PostResponseEvent $event)
+    public function onKernelTerminate(TerminateEvent $event)
     {
         $this->statsdClient->send();
     }
