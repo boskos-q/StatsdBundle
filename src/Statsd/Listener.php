@@ -44,8 +44,8 @@ class Listener
             $code = 'unknown';
         }
         $this->eventDispatcher->dispatch(
-            'statsd.exception',
-            new StatsdEvent($code)
+            new StatsdEvent($code),
+            'statsd.exception'
         );
     }
 
@@ -94,8 +94,8 @@ class Listener
         $memory = ($memory > 1024 ? intval($memory / 1024) : 0);
 
         $this->eventDispatcher->dispatch(
-            'statsd.memory_usage',
-            new StatsdEvent($memory)
+            new StatsdEvent($memory),
+            'statsd.memory_usage'
         );
     }
 
@@ -114,8 +114,8 @@ class Listener
         $time      = round($time * 1000);
 
         $this->eventDispatcher->dispatch(
-            'statsd.time',
-            new StatsdEvent($time)
+            new StatsdEvent($time),
+            'statsd.time'
         );
     }
 }
