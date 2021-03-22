@@ -3,7 +3,6 @@
 namespace M6Web\Bundle\StatsdBundle\Tests\Units\Client;
 
 use atoum\atoum;
-use atoum\atoum\mock;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\PropertyAccess;
 
