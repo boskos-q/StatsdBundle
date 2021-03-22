@@ -4,7 +4,7 @@ namespace M6Web\Bundle\StatsdBundle\Tests\Units\Listener;
 
 use M6Web\Bundle\StatsdBundle\Listener\ConsoleListener as Base;
 
-use mageekguy\atoum;
+use atoum\atoum;
 use Symfony\Component\Console\ConsoleEvents as BaseConsoleEvent;
 use M6Web\Bundle\StatsdBundle\Event\ConsoleEvent;
 

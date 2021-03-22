@@ -7,6 +7,9 @@ This bundle currently supports `php >=7.1.3` and `symfony 3.4/4.x`.
 
 If you need support for `php >=5.4.0` and `symfony 2.x/3.x`, use version [v2.15.1](https://github.com/M6Web/StatsdBundle/tree/v2.15.1).
 
+For php8 use tag [>= 4.0.0](https://github.com/sctr/StatsdBundle/releases/tag/v4.0.0)
+
+
  * [about](doc/about.md)
  * [installation](doc/installation.md)
  * [usage](doc/usage.md)

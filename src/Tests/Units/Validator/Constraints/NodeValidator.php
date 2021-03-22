@@ -2,7 +2,7 @@
 
 namespace M6Web\Bundle\StatsdBundle\Tests\Units\Validator\Constraints;
 
-use mageekguy\atoum;
+use atoum\atoum;
 
 use M6Web\Bundle\StatsdBundle\Validator\Constraints\NodeValidator as TestedClass;
 
