@@ -2,7 +2,8 @@
 
 namespace M6Web\Bundle\StatsdBundle\Tests\Units\Client;
 
-use mageekguy\atoum;
+use atoum\atoum;
+use atoum\atoum\mock;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\PropertyAccess;
 
@@ -35,7 +36,7 @@ class Client extends atoum\test
 
         $client = $this->getMockedClient();
 
-        $event = new \Symfony\Component\EventDispatcher\Event();
+        $event = new \Symfony\Contracts\EventDispatcher\Event();
 
         $client->addEventToListen('test', array(
             'increment' => 'stats.<name>'
@@ -59,7 +60,7 @@ class Client extends atoum\test
     {
         $client = $this->getMockedClient();
 
-        $event = new \Symfony\Component\EventDispatcher\Event();
+        $event = new \Symfony\Contracts\EventDispatcher\Event();
 
         $client->addEventToListen('test', array(
             'decrement' => 'stats.<name>'
@@ -83,7 +84,7 @@ class Client extends atoum\test
 
         $client = $this->getMockedClient();
 
-        $event = new \Symfony\Component\EventDispatcher\Event();
+        $event = new \Symfony\Contracts\EventDispatcher\Event();
 
         $client->addEventToListen('test', array(
             'increment'      => 'stats.<name>',
@@ -109,7 +110,7 @@ class Client extends atoum\test
         $client = $this->getMockedClient();
         $client->setToSendLimit(3);
 
-        $event = new \Symfony\Component\EventDispatcher\Event();
+        $event = new \Symfony\Contracts\EventDispatcher\Event();
 
         $queue = new \SPLQueue;
 
@@ -148,7 +149,7 @@ class Client extends atoum\test
         ));
 
         $this->exception(function () use ($client) {
-            $event = new \Symfony\Component\EventDispatcher\Event();
+            $event = new \Symfony\Contracts\EventDispatcher\Event();
 
             $client->handleEvent($event, 'test');
         });
@@ -166,7 +167,7 @@ class Client extends atoum\test
         ));
 
         $this->exception(function () use ($client) {
-            $event = new \Symfony\Component\EventDispatcher\Event();
+            $event = new \Symfony\Contracts\EventDispatcher\Event();
 
             $client->handleEvent($event, 'test');
         });
@@ -178,7 +179,7 @@ class Client extends atoum\test
         ));
 
         $this->exception(function () use ($client) {
-            $event = new \Symfony\Component\EventDispatcher\Event();
+            $event = new \Symfony\Contracts\EventDispatcher\Event();
 
             $client->handleEvent($event, 'test');
         });
@@ -253,7 +254,7 @@ class Client extends atoum\test
         $dispatcher->addListener('test.event.name', [$client, 'handleEvent']);
 
         $this
-            ->if($dispatcher->dispatch('test.event.name', $event))
+            ->if($dispatcher->dispatch($event,'test.event.name'))
                 ->mock($client)
                     ->call('timing')
                         ->withArguments('my.statsd.node', 101, 1.0)
@@ -278,7 +279,7 @@ class Client extends atoum\test
         $dispatcher->addListener('test.event.name', [$client, 'handleEvent']);
 
         $this
-            ->if($dispatcher->dispatch('test.event.other.name', $event))
+            ->if($dispatcher->dispatch($event, 'test.event.other.name'))
                 ->mock($client)
                     ->call('timing')
                     ->never();

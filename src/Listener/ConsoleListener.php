@@ -90,7 +90,7 @@ class ConsoleListener
                 !is_null($this->startTime) ? microtime(true) - $this->startTime : null
             );
 
-            return $this->eventDispatcher->dispatch($eventName, $finaleEvent);
+            return $this->eventDispatcher->dispatch($finaleEvent, $eventName);
         } else {
             return false;
         }

@@ -1,7 +1,7 @@
 <?php
 namespace M6Web\Bundle\StatsdBundle\DependencyInjection\tests\units;
 
-use mageekguy\atoum;
+use atoum\atoum;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
@@ -19,7 +19,7 @@ class M6WebStatsdExtension extends atoum\test
     protected function initContainer($resource, $debug = false)
     {
         $this->container = new ContainerBuilder();
-        $this->container->register('event_dispatcher', new EventDispatcher());
+        $this->container->register('event_dispatcher', EventDispatcher::class);
         $this->container->registerExtension(new BaseM6WebStatsdExtension());
         $this->loadConfiguration($this->container, $resource);
         $this->container->setParameter('kernel.debug', $debug);
