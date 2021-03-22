@@ -3,10 +3,13 @@ language: php
 php:
   - 7.1
   - 7.2
+  - 7.3
+  - 7.4
+  - 8.0
 
 env:
-  - SYMFONY_VERSION=3.4.0
-  - SYMFONY_VERSION=4.0.*
+  - SYMFONY_VERSION=4.4.*
+  - SYMFONY_VERSION=5.*.*
 
 before_script:
   - wget http://getcomposer.org/composer.phar
@@ -14,5 +17,6 @@ before_script:
   - php composer.phar update --prefer-dist --no-interaction --dev
 
 script:
-  - bin/coke
+# disabled coke, as it's currently not supporting php8
+#  - bin/coke
   - bin/atoum
