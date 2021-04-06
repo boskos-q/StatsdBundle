@@ -2,13 +2,15 @@ StatsdBundle [![Build Status](https://travis-ci.org/M6Web/StatsdBundle.png?branc
 =======
 
 ## Bundle easing the [statsd](https://github.com/etsy/statsd/) usage.
+This bundle is fork of [M6Web/StatsdBundle](https://github.com/M6Web/StatsdBundle)
 
-This bundle currently supports `php >=7.1.3` and `symfony 3.4/4.x`.
+####Supported versions table
 
-If you need support for `php >=5.4.0` and `symfony 2.x/3.x`, use version [v2.15.1](https://github.com/M6Web/StatsdBundle/tree/v2.15.1).
-
-For php8 use tag [>= 4.0.0](https://github.com/sctr/StatsdBundle/releases/tag/v4.0.0)
-
+| PHP                   | Symfony             | Bundle  |
+|-----------------------|---------------------|---------|
+| `>= 7.1.3`            | `^3.4` `^4.0`       | `3.0.0` |
+| `>= 7.1.3` `>= 8.0.0` | `^3.4` `^4.0` `~5.1`| `4.0.0` |
+| `>= 7.2.5` `>= 8.0.0` | `^5.2`              | `5.0.0` |
 
  * [about](doc/about.md)
  * [installation](doc/installation.md)
