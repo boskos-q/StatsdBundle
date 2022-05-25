@@ -19,7 +19,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder('m6_statsd');
-        $rootNode    = $treeBuilder->getRootNode();
+        $rootNode = $treeBuilder->getRootNode();
 
         $this->addServersSection($rootNode);
         $this->addClientsSection($rootNode);
@@ -36,7 +36,17 @@ class Configuration implements ConfigurationInterface
                     ->useAttributeAsKey('alias', false)
                     ->prototype('array')
                         ->children()
-                            ->scalarNode('address')->isRequired()->end()
+                            ->scalarNode('address')
+                                ->isRequired()
+                                ->validate()
+                                    ->ifTrue(
+                                        function ($v) {
+                                            return substr($v, 0, 6) != 'udp://';
+                                        }
+                                    )
+                                    ->thenInvalid("address parameter should begin with 'udp://'")
+                                ->end()
+                            ->end()
                             ->scalarNode('port')->isRequired()->end()
                         ->end()
                     ->end()
@@ -78,6 +88,7 @@ class Configuration implements ConfigurationInterface
                                     ->end()
                                 ->end()
                             ->end()
+                            ->scalarNode('message_formatter')->defaultValue('influxdbstatsd')->end()
                             ->integerNode('to_send_limit')->min(1)->end()
                         ->end()
                     ->end()

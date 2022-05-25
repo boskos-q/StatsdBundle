@@ -4,22 +4,20 @@ namespace M6Web\Bundle\StatsdBundle\Client;
 
 use M6Web\Bundle\StatsdBundle\Statsd\MonitorableEventInterface;
 use M6Web\Component\Statsd\Client as BaseClient;
-use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\PropertyAccess;
 
 /**
  * Class that extends base statsd client, to handle auto-increment from event dispatcher notifications
- *
  */
 class Client extends BaseClient
 {
+    /** @var array */
     protected $listenedEvents = [];
 
-    /**
-     * @var PropertyAccessInterface
-     */
+    /** @var PropertyAccess\PropertyAccessorInterface */
     protected $propertyAccessor;
 
+    /** @var int|null */
     protected $toSendLimit;
 
     /**
@@ -59,7 +57,6 @@ class Client extends BaseClient
 
     /**
      * set the property accessor used in replaceConfigPlaceholder
-     * @param PropertyAccess\PropertyAccessorInterface $propertyAccessor
      *
      * @return $this
      */
@@ -77,6 +74,7 @@ class Client extends BaseClient
      * @param string         $name  the event name
      *
      * @throws Exception
+     *
      * @return void
      */
     public function handleEvent($event, $name = null)
@@ -90,17 +88,16 @@ class Client extends BaseClient
             return;
         }
 
-        $config        = $this->listenedEvents[$name];
+        $config = $this->listenedEvents[$name];
         $immediateSend = false;
-        $tags          = $this->mergeTags($event, $config);
+        $tags = $this->mergeTags($event, $config);
 
         // replace placeholders in tags
-        $tags = array_map(function($tag) use ($event, $name) {
+        $tags = array_map(function ($tag) use ($event, $name) {
             return $this->replaceConfigPlaceholder($event, $name, $tag);
         }, $tags);
 
         foreach ($config as $conf => $confValue) {
-
             // increment
             if ('increment' === $conf) {
                 $this->increment($this->replaceConfigPlaceholder($event, $name, $confValue), 1, $tags);
@@ -124,7 +121,7 @@ class Client extends BaseClient
             } elseif ('tags' === $conf) {
                 // nothing
             } else {
-                throw new Exception("configuration : ".$conf." not handled by the StatsdBundle or its value is in a wrong format.");
+                throw new Exception('configuration : '.$conf.' not handled by the StatsdBundle or its value is in a wrong format.');
             }
         }
 
@@ -144,25 +141,26 @@ class Client extends BaseClient
      * @param string $method
      *
      * @return mixed
+     *
      * @throws Exception
      */
     private function getEventValue($event, $method)
     {
         if (!method_exists($event, $method)) {
-            throw new Exception("The event class ".get_class($event)." must have a ".$method." method in order to mesure value");
+            throw new Exception('The event class '.get_class($event).' must have a '.$method.' method in order to mesure value');
         }
 
-        return call_user_func(array($event,$method));
+        return call_user_func([$event, $method]);
     }
 
     /**
      * Factorisation of the timing method
      * find the value timed
      *
-     * @param object $event Event
+     * @param object $event        Event
      * @param string $timingMethod Callable method in the event
-     * @param string $node Node
-     * @param array  $tags Tags key => value for influxDb
+     * @param string $node         Node
+     * @param array  $tags         Tags key => value for influxDb
      *
      * @throws Exception
      */
@@ -177,9 +175,9 @@ class Client extends BaseClient
     /**
      * Replaces a string with a method name
      *
-     * @param EventInterface $event An event
+     * @param EventInterface $event     An event
      * @param string         $eventName The name of the event
-     * @param string         $string  The node in which the replacing will happen
+     * @param string         $string    The node in which the replacing will happen
      *
      * @return string
      */

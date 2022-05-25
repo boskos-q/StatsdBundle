@@ -3,10 +3,9 @@
 namespace M6Web\Bundle\StatsdBundle\Listener;
 
 use M6Web\Bundle\StatsdBundle\Event\ConsoleEvent;
-
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Console\Event\ConsoleEvent as BaseConsoleEvent;
 use Symfony\Component\Console\Event\ConsoleTerminateEvent;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Listen to symfony command events
@@ -14,9 +13,7 @@ use Symfony\Component\Console\Event\ConsoleTerminateEvent;
  */
 class ConsoleListener
 {
-    /**
-     * @var EventDispatcherInterface
-     */
+    /** @var EventDispatcherInterface */
     protected $eventDispatcher = null;
 
     /**
@@ -28,54 +25,42 @@ class ConsoleListener
 
     /**
      * Define event dispatch
-     *
-     * @param EventDispatcherInterface $ev
      */
     public function setEventDispatcher(EventDispatcherInterface $ev)
     {
         $this->eventDispatcher = $ev;
     }
 
-    /**
-     * @param BaseConsoleEvent $e
-     */
     public function onCommand(BaseConsoleEvent $e)
     {
         $this->startTime = microtime(true);
 
-        $this->dispatch(ConsoleEvent::COMMAND, $e);
+        $this->dispatch($e, ConsoleEvent::COMMAND);
     }
 
-    /**
-     * @param ConsoleTerminateEvent $e
-     */
     public function onTerminate(ConsoleTerminateEvent $e)
     {
         // For non-0 exit command, fire an ERROR event
         if ($e->getExitCode() != 0) {
-            $this->dispatch(ConsoleEvent::ERROR, $e);
+            $this->dispatch($e, ConsoleEvent::ERROR);
         }
 
-        $this->dispatch(ConsoleEvent::TERMINATE, $e);
+        $this->dispatch($e, ConsoleEvent::TERMINATE);
     }
 
-    /**
-     * @param BaseConsoleEvent $e
-     */
     public function onException(BaseConsoleEvent $e)
     {
-        $this->dispatch(ConsoleEvent::EXCEPTION, $e);
+        $this->dispatch($e, ConsoleEvent::EXCEPTION);
     }
 
     /**
      * Dispatch custom event
      *
-     * @param string           $eventName
-     * @param BaseConsoleEvent $e
+     * @param string $eventName
      *
-     * @return boolean
+     * @return bool
      */
-    protected function dispatch($eventName, BaseConsoleEvent $e)
+    protected function dispatch(BaseConsoleEvent $e, $eventName)
     {
         if (!is_null($this->eventDispatcher)) {
             $class = str_replace(
