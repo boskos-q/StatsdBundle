@@ -3,6 +3,7 @@
 namespace M6Web\Bundle\StatsdBundle\DependencyInjection;
 
 use M6Web\Bundle\StatsdBundle\Client\Client;
+use M6Web\Bundle\StatsdBundle\DataCollector\StatsdDataCollector;
 use M6Web\Bundle\StatsdBundle\Listener\ConsoleListener;
 use M6Web\Bundle\StatsdBundle\Statsd\Listener;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
