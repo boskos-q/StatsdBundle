@@ -39,9 +39,9 @@ class StatsdDataCollector extends DataCollector
      *
      * @param EventInterface $event The received event
      */
-    public function onKernelResponse($event)
+    public function onKernelResponse(EventInterface $event)
     {
-        if (HttpKernelInterface::MASTER_REQUEST == $event->getRequestType()) {
+        if (HttpKernelInterface::MAIN_REQUEST == $event->getRequestType()) {
             foreach ($this->statsdClients as $clientName => $client) {
                 $clientInfo = [
                     'name' => $clientName,

@@ -16,7 +16,7 @@ class Configuration implements ConfigurationInterface
     /**
      * {@inheritDoc}
      */
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('m6_statsd');
         $rootNode = $treeBuilder->getRootNode();
@@ -41,7 +41,7 @@ class Configuration implements ConfigurationInterface
                                 ->validate()
                                     ->ifTrue(
                                         function ($v) {
-                                            return substr($v, 0, 6) != 'udp://';
+                                            return !str_starts_with($v, 'udp://');
                                         }
                                     )
                                     ->thenInvalid("address parameter should begin with 'udp://'")

@@ -14,18 +14,16 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
  */
 class Listener
 {
-    protected $statsdClient;
-
     /**
      * Construct the listener, injecting the statsd client service
      *
      * @param Client                   $statsdClient    The statsd client service
      * @param EventDispatcherInterface $eventDispatcher Event dispatcher to use
      */
-    public function __construct(Client $statsdClient, EventDispatcherInterface $eventDispatcher)
-    {
-        $this->statsdClient = $statsdClient;
-        $this->eventDispatcher = $eventDispatcher;
+    public function __construct(
+        protected Client $statsdClient,
+        protected EventDispatcherInterface $eventDispatcher
+    ) {
     }
 
     /**
@@ -33,12 +31,7 @@ class Listener
      */
     public function onKernelException(ExceptionEvent $event)
     {
-        // @TODO: remove this backward compatibility layer after symfony 4.4 has been dropped
-        if (method_exists($event, 'getThrowable')) {
-            $exception = $event->getThrowable();
-        } else {
-            $exception = $event->getException();
-        }
+        $exception = $event->getThrowable();
 
         if ($exception instanceof HttpExceptionInterface) {
             $code = $exception->getStatusCode();
