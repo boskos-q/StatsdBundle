@@ -2,6 +2,8 @@
 
 namespace M6Web\Bundle\StatsdBundle\DependencyInjection;
 
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -54,7 +56,7 @@ class Configuration implements ConfigurationInterface
             ->end();
     }
 
-    private function addClientsSection($rootNode)
+    private function addClientsSection($rootNode): void
     {
         $rootNode
             ->children()
@@ -98,10 +100,8 @@ class Configuration implements ConfigurationInterface
 
     /**
      * addDefaultEventSection
-     *
-     * @param mixed $rootNode
      */
-    private function addDefaultEventSection($rootNode)
+    private function addDefaultEventSection(NodeDefinition|ArrayNodeDefinition $rootNode): void
     {
         $rootNode
             ->children()

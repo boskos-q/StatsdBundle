@@ -5,6 +5,7 @@ namespace M6Web\Bundle\StatsdBundle\DataCollector;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 /**
@@ -12,7 +13,7 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
  */
 class StatsdDataCollector extends DataCollector
 {
-    private $statsdClients;
+    private array $statsdClients;
 
     /**
      * Construct the data collector
@@ -25,7 +26,7 @@ class StatsdDataCollector extends DataCollector
     /**
      * Reset the data collector to initial state
      */
-    public function reset()
+    public function reset(): void
     {
         $this->statsdClients = [];
         $this->data = [
@@ -34,12 +35,7 @@ class StatsdDataCollector extends DataCollector
         ];
     }
 
-    /**
-     * Kernel event
-     *
-     * @param EventInterface $event The received event
-     */
-    public function onKernelResponse(EventInterface $event)
+    public function onKernelResponse(ResponseEvent $event)
     {
         if (HttpKernelInterface::MAIN_REQUEST == $event->getRequestType()) {
             foreach ($this->statsdClients as $clientName => $client) {

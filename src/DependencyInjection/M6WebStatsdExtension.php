@@ -2,6 +2,9 @@
 
 namespace M6Web\Bundle\StatsdBundle\DependencyInjection;
 
+use M6Web\Bundle\StatsdBundle\Client\Client;
+use M6Web\Bundle\StatsdBundle\Listener\ConsoleListener;
+use M6Web\Bundle\StatsdBundle\Statsd\Listener;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -43,7 +46,7 @@ class M6WebStatsdExtension extends Extension
             );
         }
         if ($container->getParameter('kernel.debug')) {
-            $definition = new Definition('M6Web\Bundle\StatsdBundle\DataCollector\StatsdDataCollector');
+            $definition = new Definition(StatsdDataCollector::class);
             $definition->setPublic(true);
             $definition->addTag(
                 'data_collector',
@@ -73,7 +76,7 @@ class M6WebStatsdExtension extends Extension
             $container
                 ->register(
                     'm6.listener.statsd.console',
-                    'M6Web\Bundle\StatsdBundle\Listener\ConsoleListener'
+                    ConsoleListener::class
                 )
                 ->addTag(
                     'kernel.event_listener',
@@ -104,7 +107,7 @@ class M6WebStatsdExtension extends Extension
      *
      * @return string the service name
      */
-    protected function loadClient($container, $alias, array $config, array $servers, $baseEvents)
+    protected function loadClient(ContainerInterface $container, string $alias, array $config, array $servers, bool $baseEvents): string
     {
         $usedServers = [];
         $events = $config['events'];
@@ -152,7 +155,7 @@ class M6WebStatsdExtension extends Extension
 
         // Add the statsd client configured
         $serviceId = ($alias == 'default') ? 'm6_statsd' : 'm6_statsd.'.$alias;
-        $definition = new Definition('M6Web\Bundle\StatsdBundle\Client\Client');
+        $definition = new Definition(Client::class);
         $definition->setPublic(true);
         $definition->addArgument($usedServers);
         $definition->addArgument(new Reference(
@@ -176,7 +179,7 @@ class M6WebStatsdExtension extends Extension
 
         // Add the statsd client listener
         $serviceListenerId = $serviceId.'.listener';
-        $definition = new Definition('M6Web\Bundle\StatsdBundle\Statsd\Listener');
+        $definition = new Definition(Listener::class);
         $definition->setPublic(true);
         $definition->addArgument(new Reference($serviceId));
         $definition->addArgument(new Reference('event_dispatcher'));
